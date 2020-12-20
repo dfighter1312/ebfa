@@ -8,10 +8,6 @@
     require_once "./functions/database_functions.php";
     $conn = db_connect();
     $row = getBook($conn, $book_isbn);
-    foreach($row as $key => $value){
-        echo $key;
-        echo $value;
-    }
 ?>
 
 <head>
@@ -313,8 +309,20 @@
                                     <?php } ?>
                                     </table>
                                     
-                                    <form>
-                                        <input type="number" id="number" value="0" />
+                                    <form method="post" action="cart.php">
+                                        <!-- <div class="col-lg-2 mb-2"> -->
+                                            <!-- <div class="row"> -->
+                                                <div class="form-group">
+                                                    <label for="number" class="form-text">Quantity</label>
+                                                    <input type="number" id="number" value="0" class="mb-2">
+                                                    <div class="form-check mb-2">
+                                                        <input type="checkbox" class="form-check-input" id="rent">
+                                                        <label class="form-check-label" for="exampleCheck1">For Rent</label>
+                                                    </div>
+                                                    <input type="submit" value="Purchase / Add to cart" name="cart" class="btn btn-primary">
+                                                </div>
+                                            <!-- </div> -->
+                                        <!-- </div> -->
                                     </form>
                                 </div>
                             </div>

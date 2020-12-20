@@ -33,4 +33,16 @@
   		}
 		return $row;  
 	}
+
+	function getBookPrice($isbn){
+		$conn = db_connect();
+		$query = "SELECT Price FROM books WHERE ISBN = '$isbn'";
+		$result = mysqli_query($conn, $query);
+		if(!$result){
+			echo "get book price failed! " . mysqli_error($conn);
+			exit;
+		}
+		$row = mysqli_fetch_assoc($result);
+		return $row['book_price'];
+	}
 ?>

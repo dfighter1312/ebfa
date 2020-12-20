@@ -1,4 +1,4 @@
-<!-- <?php
+<?php
 	/*
 		loop through array of $_SESSION['cart'][book_isbn] => number
 		get isbn => take from database => take book price
@@ -9,7 +9,7 @@
 		$price = 0.0;
 		if(is_array($cart)){
 		  	foreach($cart as $isbn => $qty){
-		  		// $bookprice = getbookprice($isbn);
+		  		$bookprice = getBookPrice($isbn);
 		  		if($bookprice){
 		  			$price += $bookprice * $qty;
 		  		}
@@ -32,4 +32,4 @@
 		}
 		return $items;
 	}
-?> -->
+?>
