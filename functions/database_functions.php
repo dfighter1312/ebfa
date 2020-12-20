@@ -17,4 +17,20 @@
 		}
 		return $result;
 	}
+
+	function getBook($conn, $book_isbn){
+		$query = "SELECT * FROM books WHERE ISBN = '$book_isbn'";
+  		$result = mysqli_query($conn, $query);
+  		if(!$result){
+    		echo "Can't retrieve data " . mysqli_error($conn);
+    		exit;
+  		}
+
+  		$row = mysqli_fetch_assoc($result);
+  		if(!$row){
+    		echo "Empty book";
+    	exit;
+  		}
+		return $row;  
+	}
 ?>
