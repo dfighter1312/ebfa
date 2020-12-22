@@ -13,14 +13,14 @@ END//
 delimiter ;
 
 DELIMITER //
-DROP PROCEDURE if EXISTS  id_purchased //
+DROP PROCEDURE if EXISTS  total_id_purchased //
 CREATE PROCEDURE
-	id_purchased(today date)
+	total_id_purchased(today date)
 BEGIN
-    SELECT ISBN
+SELECT ISBN, SUM(quantity)
 FROM orders, buy_order, books
-WHERE orders.issue_date = today AND orders.order_id = buy_order.oid 
-								AND buy_order.buyid = books.ISBN;
+WHERE orders.issue_date = '2013-01-19' AND orders.order_id = buy_order.oid AND buy_order.buyid = books.ISBN
+GROUP BY ISBN;
 END//
 delimiter ;
 
