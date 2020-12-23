@@ -19,7 +19,7 @@ CREATE PROCEDURE
 BEGIN
 SELECT ISBN, SUM(quantity)
 FROM orders, buy_order, books
-WHERE orders.issue_date = '2013-01-19' AND orders.order_id = buy_order.oid AND buy_order.buyid = books.ISBN
+WHERE orders.issue_date = today AND orders.order_id = buy_order.oid AND buy_order.buyid = books.ISBN
 GROUP BY ISBN;
 END//
 delimiter ;
@@ -60,6 +60,30 @@ FROM orders, buy_order
 WHERE orders.issue_date = today AND orders.order_id = buy_order.oid AND buy_order.buyid IN
 (SELECT eISBN
 FROM ebook);
+END//
+delimiter ;
+
+DELIMITER //
+DROP PROCEDURE if EXISTS  ebook_purchased//
+CREATE PROCEDURE
+	 ebook_purchased (today date)
+BEGIN
+SELECT buyid, SUM(quantity)
+FROM orders, buy_order
+WHERE orders.issue_date = today AND orders.order_id = buy_order.oid  AND buy_order.quantity = 0 AND buy_order.buyid IN
+(SELECT eISBN
+FROM ebook);
+END//
+delimiter ;
+
+DELIMITER //
+DROP PROCEDURE if EXISTS  ebook_rented//
+CREATE PROCEDURE
+	 ebook_rented (today date)
+BEGIN
+SELECT COUNT(*)
+FROM orders, rent_order, books
+WHERE orders.issue_date = today AND orders.order_id = rent_order.roid AND buy_order.buyid = books.ISBN;
 END//
 delimiter ;
 

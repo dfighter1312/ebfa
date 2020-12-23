@@ -45,4 +45,16 @@
 		$row = mysqli_fetch_assoc($result);
 		return $row['book_price'];
 	}
+	function getMostPurchasedBook($date){
+		$conn = db_connect();
+		$query = "CALL id_purchased(date)";
+		$result = mysqli_qury($conn, $quer);
+		if(!resutl){
+			echo "get most purchased book failed!". mysqli_error($conn);
+			exit;
+		}
+		$row = mysqli_fetch_assoc($result);
+		return $row['total sale'];
+	}
+	
 ?>
