@@ -48,13 +48,84 @@
 	function getMostPurchasedBook($date){
 		$conn = db_connect();
 		$query = "CALL id_purchased(date)";
-		$result = mysqli_qury($conn, $quer);
-		if(!resutl){
+		$result = mysqli_query($conn, $query);
+		if(!$result){
 			echo "get most purchased book failed!". mysqli_error($conn);
 			exit;
 		}
 		$row = mysqli_fetch_assoc($result);
 		return $row['total sale'];
 	}
-	
+
+
+	function getKeyword($conn){
+		// $conn = db_connect();
+		$query = "SELECT keywords FROM keyword GROUP BY keywords ORDER BY keywords;";
+		$result = mysqli_query($conn, $query);
+		if(!$result){
+			echo "No keyword" . mysqli_error($conn);
+			exit;
+		}
+		return $result;
+	}
+
+	function getCategory($conn){
+		// $conn = db_connect();
+		$query = "SELECT category_name FROM category GROUP BY category_name ORDER BY category_name;";
+		$result = mysqli_query($conn, $query);
+		if(!$result){
+			echo "No category" . mysqli_error($conn);
+			exit;
+		}
+		return $result;
+	}
+
+	function getPublisher($conn){
+		$query = "SELECT Publisher from books ORDER BY Publisher";
+		$result = mysqli_query($conn, $query);
+		if(!$result){
+			echo "No category" . mysqli_error($conn);
+			exit;
+		}
+		return $result;
+	}
+
+	function getAuthor($conn){
+		// $conn = db_connect();
+		$query = "SELECT author_id, fname, lname FROM authors ORDER BY fname;";
+		$result = mysqli_query($conn, $query);
+		if(!$result){
+			echo "No category" . mysqli_error($conn);
+			exit;
+		}
+		return $result;
+	}
+
+	function isEBook($isbn){
+		$conn = db_connect();
+		$query = "SELECT eISBN FROM ebook WHERE eISBN = '$isbn';";
+		$result = mysqli_query($conn, $query);
+		$result = mysqli_fetch_assoc($result);
+		return $result;
+	}
+
+	function getBookByKeyword($conn, $keyword){
+		$query = "SELECT * FROM books, keyword WHERE keywords = '$keyword' AND ISBN = keybookid;";
+		$result = mysqli_query($conn, $query);
+		if(!$result){
+		    echo "Can't retrieve data " . mysqli_error($conn);
+		    exit;
+		}
+		return $result;
+	}
+
+	function getBookByCategory($conn, $category){
+		$query = "SELECT * FROM books, category WHERE category_name = '$category' AND ISBN = catebookid;";
+		$result = mysqli_query($conn, $query);
+		if(!$result){
+		    echo "Can't retrieve data " . mysqli_error($conn);
+		    exit;
+		}
+		return $result;
+	}
 ?>
