@@ -28,11 +28,11 @@ CREATE TABLE IF NOT EXISTS `books` (
   `Year` INT NOT NULL,
   `Price` decimal(6,2) NOT NULL,
   `Publisher` varchar(50) NOT NULL,
-  `stock_status` varchar(50) NOT NULL DEFAULT 'out of stock',
+  `stock_status` enum('OUT_OF_STOCK', 'IN_STOCK') NOT NULL DEFAULT 'OUT_OF_STOCK',
   PRIMARY KEY (`ISBN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
- 
- CREATE TABLE IF NOT EXISTS `ebook` (
+
+CREATE TABLE IF NOT EXISTS `ebook` (
 	`eISBN` INT NOT NULL,
     `DownloadLink` TEXT,
 	`AccessLink` TEXT,
@@ -42,8 +42,8 @@ CREATE TABLE IF NOT EXISTS `books` (
         REFERENCES `books`(`ISBN`)
         ON DELETE CASCADE
         ON UPDATE CASCADE
- ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
- 
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
 CREATE TABLE IF NOT EXISTS `category` (
 	`catebookid` INT NOT NULL,
     `category_name` varchar(50) NOT NULL,
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `customer_id` INT NOT NULL,
   `pmethod` varchar(50) NOT NULL,
   `issue_date` date NOT NULL,
-  `status` varchar(50) NOT NULL DEFAULT 'Processing',
+  `status` enum('Pending','Completed','Cancelled','Failed') NOT NULL DEFAULT 'Pending',
   `total_cost` INT NOT NULL,
   PRIMARY KEY (`order_id`),
   INDEX `customer_id_idx` (`customer_id` ASC) VISIBLE,
@@ -127,12 +127,12 @@ CREATE TABLE IF NOT EXISTS `buy_order` (
     `quantity` INT NOT NULL,
     INDEX `oid_idx` (`oid` ASC) VISIBLE,
     INDEX `buyid_idx` (`buyid` ASC) VISIBLE,
-     CONSTRAINT `oid`
+    CONSTRAINT `oid`
 		FOREIGN KEY(`oid`)
         REFERENCES `orders`(`order_id`)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-	 CONSTRAINT `buyid`
+	  CONSTRAINT `buyid`
 		FOREIGN KEY(`buyid`)
         REFERENCES `books`(`ISBN`)
         ON DELETE CASCADE
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `rent_order` (
         REFERENCES `orders`(`order_id`)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-	 CONSTRAINT `rentid`
+	  CONSTRAINT `rentid`
 		FOREIGN KEY(`rentid`)
         REFERENCES `books`(`ISBN`)
         ON DELETE CASCADE
