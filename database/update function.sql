@@ -53,7 +53,7 @@ RETURNS INT DETERMINISTIC
 BEGIN 
     UPDATE `credit_card` SET `card_id` = card_id WHERE (`owner_id` = o_id);
     UPDATE `credit_card` SET `bank_branch` = bank_branch WHERE (`owner_id` = o_id);
-    UPDATE `credit_card` SET `bank_name` = card_id WHERE (`bank_name` = o_id);
+    UPDATE `credit_card` SET `bank_name` = card_id WHERE (`owner_id` = o_id);
 	RETURN 1;
 END;
 DELIMITER;

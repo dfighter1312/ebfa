@@ -65,7 +65,7 @@ DROP PROCEDURE if EXISTS  bought_in_month //
 CREATE PROCEDURE
 	bought_in_month(m  INT, cid INT)
 BEGIN
-  SELECT Title 
+SELECT Title 
 FROM customer 
 JOIN
 (SELECT * 
@@ -92,7 +92,7 @@ DROP PROCEDURE if EXISTS  trans_in_month //
 CREATE PROCEDURE
 	trans_in_month(m INT, cid INT)
 BEGIN
-   SELECT order_id, pmethod, issue_date, status, total_cost
+	SELECT order_id, pmethod, issue_date, status, total_cost
 	FROM customer a
 	JOIN orders b
 	ON a.customer_id = b.customer_id
@@ -106,7 +106,7 @@ DROP PROCEDURE if EXISTS  failed_trans_in_month //
 CREATE PROCEDURE
 	failed_trans_in_month(m INT, cid INT)
 BEGIN
-   SELECT order_id, pmethod, issue_date, status, total_cost
+	SELECT order_id, pmethod, issue_date, status, total_cost
 	FROM customer a
 	JOIN orders b
 	ON a.customer_id = b.customer_id
@@ -120,7 +120,7 @@ DROP PROCEDURE if EXISTS  uncompleted_trans_in_month //
 CREATE PROCEDURE
 	uncompleted_trans_in_month(m INT, cid INT)
 BEGIN
-  SELECT order_id, pmethod, issue_date, status, total_cost
+  	SELECT order_id, pmethod, issue_date, status, total_cost
 	FROM customer a
 	JOIN orders b
 	ON a.customer_id = b.customer_id
@@ -134,7 +134,7 @@ DROP PROCEDURE if EXISTS  authors_in_category //
 CREATE PROCEDURE
 	authors_in_category(cate varchar(50))
 BEGIN
-  SELECT fname, lname
+SELECT fname, lname
 FROM
 (SELECT*
 FROM 

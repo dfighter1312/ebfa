@@ -101,6 +101,8 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `address` varchar(50) NOT NULL,
   `city` varchar(50) NOT NULL,
   `state` char(2) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
   PRIMARY KEY (`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
@@ -108,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
 CREATE TABLE IF NOT EXISTS `orders` (
   `order_id` INT NOT NULL AUTO_INCREMENT,
   `customer_id` INT NOT NULL,
-  `pmethod` varchar(50) NOT NULL,
+  `pmethod` enum('Credit card', 'Bank deposit', 'Pay at arrival') NOT NULL DEFAULT 'Pay at arrival',
   `issue_date` date NOT NULL,
   `status` enum('Pending','Completed','Cancelled','Failed') NOT NULL DEFAULT 'Pending',
   `total_cost` INT NOT NULL,

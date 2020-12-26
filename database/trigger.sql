@@ -10,5 +10,35 @@ BEGIN
 	END IF;
     IF OLD.numstock = 0 AND NEW.numstock <> 0 THEN
 		UPDATE `books` SET `books`.stock_status  = 'IN_STOCK' WHERE `books`.ISBN = NEW.stockid;
-END;
-DELIMITER;
+	END IF;
+END ;
+DELIMITER ;
+
+DELIMITER //
+DROP FUNCTION IF EXISTS find_warehouse;
+CREATE FUNCTION find_warehouse (r_id INT)
+RETURNS INT 
+BEGIN 
+	DECLARE warehouse_identity INT;
+	SET warehouse_identity = 0;
+	SELECT `to_warehouse` INTO warehouse_identity
+	FROM ebook_store.stock_request
+	WHERE stock_request.request_id = r_id;
+	RETURNS warehouse_identity;
+END ;
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER stock_update AFTER UPDATE 
+ON `ebook_store`.restock FOR EACH ROW
+BEGIN 
+	DECLARE storageid INT;
+	SET storageid = find_warehouse(NEW.rid);
+
+	IF NEW.stock_num <> 0 THEN
+		DELETE FROM ebook_store.in_stock WHERE in_stock.storeid = storageid AND in_stock.stockid = NEW.rbookid;
+		INSERT INTO ebook_store.in_stock (`storeid`, `stockid`, `numstock`) VALUE (storageid, NEW.rbookid, NEW.stock_num);
+	END IF;
+END ;
+DELIMITER ;
+
