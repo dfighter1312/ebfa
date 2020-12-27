@@ -3,6 +3,29 @@
 
 <?php 
     session_start();
+    require_once './functions/database_functions.php';
+    //customerId = -1 if guest. Otherwise take the customerId from the database.
+    if(!isset($_SESSION['customerId'])){
+        $_SESSION['customerId'] = -1;
+        $_SESSION['first_name'] = 'Guest';
+        $_SESSION['last_name'] = '';
+    }
+    elseif (isset($_POST['username']) && isset($_POST['password'])) {
+        $cus = getCustomer($_POST['username'], $_POST['password']);
+        if($cus){
+            $_SESSION['customerId'] = $cus['customer_id'];
+            $_SESSION['first_name'] = $cus['first_name'];
+            $_SESSION['last_name'] = $cus['last_name'];
+            $_SESSION['phone_no'] = $cus['phoneno'];
+            $_SESSION['address'] = $cus['address'];
+            $_SESSION['city'] = $cus['city'];
+            $_SESSION['state'] = $cus['state'];
+            unset($_POST);
+        }
+        else {
+            header("Location:login.php?wronginfo=1");
+        }
+    }
     $count = 0;
     require_once "./functions/database_functions.php";
     $conn = db_connect();

@@ -43,20 +43,8 @@
 			exit;
 		}
 		$row = mysqli_fetch_assoc($result);
-		return $row['book_price'];
+		return $row['Price'];
 	}
-	function getMostPurchasedBook($date){
-		$conn = db_connect();
-		$query = "CALL id_purchased(date)";
-		$result = mysqli_query($conn, $query);
-		if(!$result){
-			echo "get most purchased book failed!". mysqli_error($conn);
-			exit;
-		}
-		$row = mysqli_fetch_assoc($result);
-		return $row['total sale'];
-	}
-
 
 	function getKeyword($conn){
 		// $conn = db_connect();
@@ -127,5 +115,33 @@
 		    exit;
 		}
 		return $result;
+	}
+
+	function getMostPurchasedBook($date){
+		$conn = db_connect();
+		$query = "CALL id_purchased('$date')";
+		$result = mysqli_query($conn, $query);
+		if(!$result){
+			echo "get most purchased book failed!". mysqli_error($conn);
+			exit;
+		}
+		$row = mysqli_fetch_assoc($result);
+		return $row['total sale'];
+	}
+
+	function getCustomer($username, $password){
+		$conn = db_connect();
+		$query = "SELECT * FROM customer WHERE username = '$username' AND password = '$password';";
+		$result = mysqli_query($conn, $query);
+		$row = mysqli_fetch_assoc($result);
+		return $row;
+	}
+
+	function updateCustomer($id, $fn, $ln, $phone, $addr, $city, $st){
+		$conn = db_connect();
+		echo $id;
+		$query = "CALL customer_update('$id', '$fn', '$ln', '$phone', '$addr', '$city', '$st');";
+		$a = mysqli_query($conn, $query);
+		var_dump($a);
 	}
 ?>

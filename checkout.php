@@ -69,24 +69,29 @@
                         <form method="post" action="purchase.php" class="form-horizontal">
                             <?php if(isset($_SESSION['err']) && $_SESSION['err'] == 1){ ?>
                                 <p class="text-danger">All fields have to be filled</p>
-                                <?php } ?>
-                            <p> Check your personal information below. If anything is not true, click <a href="#" class="text-decoration-none">here</a> to edit. </p>
+                            <?php } 
+                            if ($_SESSION['customerId'] == -1){ ?>
+                                <p class="text-danger">You need to <a href="login.php" class="text-decoration-none">log in</a> or <a href="register.php" class="text-decoration-none">sign up</a> to continue your purchase</p>
+                            <?php }
+                            else {
+                            ?>
+                            <p> Check your personal information below. If anything is not true, click <a href="profile.php" class="text-decoration-none">here</a> to edit. </p>
                             <div class="row mb-4">
                                 <div class="col-lg-6">
                                     <p class="m0">Name</p>
-                                    <p class="ml-4 font-weight-bold">Nguyễn Hoàng Dũng</p>
+                                    <p class="ml-4 font-weight-bold"><?php echo $_SESSION['first_name'], " ", $_SESSION['last_name']; ?></p>
                                     <p class="m0">Phone number</p>
-                                    <p class="ml-4 font-weight-bold">0981538824</p>
+                                    <p class="ml-4 font-weight-bold"><?php echo $_SESSION['phone_no']; ?></p>
                                     <p class="m0">Address</p>
-                                    <p class="ml-4 font-weight-bold">286 Ly Thuong Kiet Street, Ward 7, District 10</p>
+                                    <p class="ml-4 font-weight-bold"><?php echo $_SESSION['address']; ?></p>
                                 </div>
                                 <div class="col-lg-6">
                                     <p class="m0">City</p>
-                                    <p class="ml-4 font-weight-bold">Ho Chi Minh City</p>
+                                    <p class="ml-4 font-weight-bold"><?php echo $_SESSION['city']; ?></p>
                                     <p class="m0">State/Country</p>
-                                    <p class="ml-4 font-weight-bold">Vietnam</p>
+                                    <p class="ml-4 font-weight-bold"><?php echo $_SESSION['state']; ?></p>
                                     <p class="m0">Payment Method</p>
-                                    <div class="col-6">
+                                    <div class="col-6 mb-4">
                                         <select name="inputState" class="form-control sm-3">
                                             <option selected>Bank Transfer</option>
                                             <option>Credit Card 1: VISA ACB</option>
@@ -96,15 +101,17 @@
                                 </div>
                             </div>
                         </form>
+                        <a href="process.php" class="btn btn-primary mb-4">Confirm Purchase</a>
                         <p>Please press Purchase to confirm your information, or <a href="index.php" class="text-decoration-none">Continue Shopping</a> to add or remove items.</p>
 
                     <?php
-                        } else {
-                            echo "<p class=\"text-warning\">Your cart is empty! Please make sure you add some books in it!</p>";
-                        }
-                        if(isset($conn)){ mysqli_close($conn); }
-                        require_once "./template/footer.php";
-                    ?>
+                        }    
+    } else {
+        echo "<p class=\"text-warning\">Your cart is empty! Please make sure you add some books in it!</p>";
+    }
+    if(isset($conn)){ mysqli_close($conn); }
+        require_once "./template/footer.php";
+    ?>
                         </div>
                     </div>
 <?php

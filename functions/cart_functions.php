@@ -9,9 +9,15 @@
 		$price = 0.0;
 		if(is_array($cart)){
 		  	foreach($cart as $isbn => $qty){
-		  		$bookprice = getBookPrice($isbn);
+				$mul = 1;
+				if($isbn < 0){
+					$isbn = -$isbn;
+					$mul = 0.2;
+				}
+				$bookprice = getBookPrice($isbn);
+				echo $bookprice;
 		  		if($bookprice){
-		  			$price += $bookprice * $qty;
+		  			$price += $bookprice * $qty * $mul;
 		  		}
 		  	}
 		}
