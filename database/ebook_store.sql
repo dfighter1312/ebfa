@@ -28,22 +28,23 @@ CREATE TABLE IF NOT EXISTS `books` (
   `Year` INT NOT NULL,
   `Price` decimal(6,2) NOT NULL,
   `Publisher` varchar(50) NOT NULL,
-  `stock_status` varchar(50) NOT NULL DEFAULT 'out of stock',
+  `stock_status` enum('OUT_OF_STOCK', 'IN_STOCK') NOT NULL DEFAULT 'OUT_OF_STOCK',
   PRIMARY KEY (`ISBN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
- 
- CREATE TABLE IF NOT EXISTS `ebook` (
+
+CREATE TABLE IF NOT EXISTS `ebook` (
 	`eISBN` INT NOT NULL,
-    `DownloadLink` TEXT,
+  `DownloadLink` TEXT,
 	`AccessLink` TEXT,
     INDEX `eISBN_idx` (`eISBN` ASC) VISIBLE,
     CONSTRAINT `eISBN`
 		FOREIGN KEY(`eISBN`)
         REFERENCES `books`(`ISBN`)
         ON DELETE CASCADE
-        ON UPDATE CASCADE
- ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
- 
+        ON UPDATE CASCADE,
+    CONSTRAINT bundled_link PRIMARY KEY (`DownloadLink`, `AccessLink`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
 CREATE TABLE IF NOT EXISTS `category` (
 	`catebookid` INT NOT NULL,
     `category_name` varchar(50) NOT NULL,
@@ -101,6 +102,8 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `address` varchar(50) NOT NULL,
   `city` varchar(50) NOT NULL,
   `state` char(2) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
   PRIMARY KEY (`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
@@ -108,9 +111,9 @@ CREATE TABLE IF NOT EXISTS `customer` (
 CREATE TABLE IF NOT EXISTS `orders` (
   `order_id` INT NOT NULL AUTO_INCREMENT,
   `customer_id` INT NOT NULL,
-  `pmethod` varchar(50) NOT NULL,
+  `pmethod` enum('Credit card', 'Bank deposit', 'Pay at arrival') NOT NULL DEFAULT 'Pay at arrival',
   `issue_date` date NOT NULL,
-  `status` varchar(50) NOT NULL DEFAULT 'Processing',
+  `status` enum('Pending','Completed','Cancelled','Failed') NOT NULL DEFAULT 'Pending',
   `total_cost` INT NOT NULL,
   PRIMARY KEY (`order_id`),
   INDEX `customer_id_idx` (`customer_id` ASC) VISIBLE,
@@ -127,12 +130,12 @@ CREATE TABLE IF NOT EXISTS `buy_order` (
     `quantity` INT NOT NULL,
     INDEX `oid_idx` (`oid` ASC) VISIBLE,
     INDEX `buyid_idx` (`buyid` ASC) VISIBLE,
-     CONSTRAINT `oid`
+    CONSTRAINT `oid`
 		FOREIGN KEY(`oid`)
         REFERENCES `orders`(`order_id`)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-	 CONSTRAINT `buyid`
+	  CONSTRAINT `buyid`
 		FOREIGN KEY(`buyid`)
         REFERENCES `books`(`ISBN`)
         ON DELETE CASCADE
@@ -150,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `rent_order` (
         REFERENCES `orders`(`order_id`)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-	 CONSTRAINT `rentid`
+	  CONSTRAINT `rentid`
 		FOREIGN KEY(`rentid`)
         REFERENCES `books`(`ISBN`)
         ON DELETE CASCADE
@@ -197,11 +200,11 @@ CREATE TABLE IF NOT EXISTS `stock_request` (
 
 CREATE TABLE IF NOT EXISTS `restock` (
 	`rid` INT NOT NULL,
-    `rbookid` INT NOT NULL,
+  `rbookid` INT NOT NULL,
 	`stock_num` INT NOT NULL,
     INDEX `rid_idx` (`rid` ASC) VISIBLE,
     INDEX `rbookid_idx` (`rbookid` ASC) VISIBLE,
-    CONSTRAINT `rid`
+  CONSTRAINT `rid`
 		FOREIGN KEY(`rid`)
 		REFERENCES `stock_request`(`request_id`)
 		ON DELETE CASCADE
@@ -216,8 +219,8 @@ CREATE TABLE IF NOT EXISTS `restock` (
 CREATE TABLE IF NOT EXISTS `in_stock` (
 	`storeid` INT NOT NULL,
 	`stockid` INT NOT NULL,
-    `numstock` INT NOT NULL,
-    CONSTRAINT `storeid`
+  `numstock` INT NOT NULL,
+  CONSTRAINT `storeid`
 		FOREIGN KEY(`storeid`)
 		REFERENCES `warehouse`(`warehouse_id`)
 		ON DELETE CASCADE
@@ -226,7 +229,8 @@ CREATE TABLE IF NOT EXISTS `in_stock` (
 		FOREIGN KEY(`stockid`)
 		REFERENCES `books`(`ISBN`)
 		ON DELETE CASCADE
-		ON UPDATE CASCADE
+		ON UPDATE CASCADE,
+  CONSTRAINT storage PRIMARY KEY (`storeid`,`stockid`)  
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- Insert section
