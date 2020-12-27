@@ -8,7 +8,7 @@ BEGIN
 	UPDATE `book` SET `status` = b_status WHERE `ISBN` = b_id;
 	RETURN 1;
 END;
-DELIMITER;
+DELIMITER ;
 
 DELIMITER //
 DROP FUNCTION IF exists order_status_update;
@@ -18,7 +18,7 @@ BEGIN
     UPDATE `ebook_store`.`orders` SET `status` = o_status WHERE (`order_id` = o_id);
 	RETURN 1;
 END;
-DELIMITER;
+DELIMITER ;
 
 DELIMITER //
 DROP FUNCTION IF exists order_status_update;
@@ -28,7 +28,7 @@ BEGIN
     UPDATE `ebook_store`.`orders` SET `status` = o_status WHERE (`order_id` = o_id);
 	RETURN 1;
 END;
-DELIMITER;
+DELIMITER ;
 
 DELIMITER //
 DROP FUNCTION IF exists customer_update;
@@ -44,7 +44,7 @@ BEGIN
     UPDATE `customer` SET `state` = state_living WHERE (`customer_id` = cid);
 	RETURN 1;
 END;
-DELIMITER;
+DELIMITER ;
 
 DELIMITER //
 DROP FUNCTION IF exists payment_update;
@@ -56,7 +56,7 @@ BEGIN
     UPDATE `credit_card` SET `bank_name` = card_id WHERE (`owner_id` = o_id);
 	RETURN 1;
 END;
-DELIMITER;
+DELIMITER ;
 
 DELIMITER //
 DROP FUNCTION IF exists paymethod_update;
@@ -70,4 +70,4 @@ BEGIN
     WHERE b.customer_id = cid;
     RETURN 1;
 END;
-DELIMITER;
+DELIMITER ;
