@@ -34,14 +34,15 @@ CREATE TABLE IF NOT EXISTS `books` (
 
 CREATE TABLE IF NOT EXISTS `ebook` (
 	`eISBN` INT NOT NULL,
-    `DownloadLink` TEXT,
+  `DownloadLink` TEXT,
 	`AccessLink` TEXT,
     INDEX `eISBN_idx` (`eISBN` ASC) VISIBLE,
     CONSTRAINT `eISBN`
 		FOREIGN KEY(`eISBN`)
         REFERENCES `books`(`ISBN`)
         ON DELETE CASCADE
-        ON UPDATE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT bundled_link PRIMARY KEY (`DownloadLink`, `AccessLink`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 CREATE TABLE IF NOT EXISTS `category` (
@@ -199,11 +200,11 @@ CREATE TABLE IF NOT EXISTS `stock_request` (
 
 CREATE TABLE IF NOT EXISTS `restock` (
 	`rid` INT NOT NULL,
-    `rbookid` INT NOT NULL,
+  `rbookid` INT NOT NULL,
 	`stock_num` INT NOT NULL,
     INDEX `rid_idx` (`rid` ASC) VISIBLE,
     INDEX `rbookid_idx` (`rbookid` ASC) VISIBLE,
-    CONSTRAINT `rid`
+  CONSTRAINT `rid`
 		FOREIGN KEY(`rid`)
 		REFERENCES `stock_request`(`request_id`)
 		ON DELETE CASCADE
@@ -218,8 +219,8 @@ CREATE TABLE IF NOT EXISTS `restock` (
 CREATE TABLE IF NOT EXISTS `in_stock` (
 	`storeid` INT NOT NULL,
 	`stockid` INT NOT NULL,
-    `numstock` INT NOT NULL,
-    CONSTRAINT `storeid`
+  `numstock` INT NOT NULL,
+  CONSTRAINT `storeid`
 		FOREIGN KEY(`storeid`)
 		REFERENCES `warehouse`(`warehouse_id`)
 		ON DELETE CASCADE
@@ -228,7 +229,8 @@ CREATE TABLE IF NOT EXISTS `in_stock` (
 		FOREIGN KEY(`stockid`)
 		REFERENCES `books`(`ISBN`)
 		ON DELETE CASCADE
-		ON UPDATE CASCADE
+		ON UPDATE CASCADE,
+  CONSTRAINT storage PRIMARY KEY (`storeid`,`stockid`)  
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- Insert section
