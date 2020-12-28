@@ -36,8 +36,7 @@ BEGIN
 	SET storageid = find_warehouse(NEW.rid);
 
 	IF NEW.stock_num <> 0 THEN
-		DELETE FROM ebook_store.in_stock WHERE in_stock.storeid = storageid AND in_stock.stockid = NEW.rbookid;
-		INSERT INTO ebook_store.in_stock (`storeid`, `stockid`, `numstock`) VALUE (storageid, NEW.rbookid, NEW.stock_num);
+		UPDATE `in_stock` SET `in_stock`.numstock =  NEW.stock_num WHERE `in_stock`.storeid = storeid AND `in_stock`.stockid = NEW.rbookid;
 	END IF;
 END ;
 DELIMITER ;

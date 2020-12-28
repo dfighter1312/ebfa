@@ -110,7 +110,7 @@
 	}
 
 	function getBookByKeyword($conn, $keyword){
-		$query = "SELECT * FROM books, keyword WHERE keywords = '$keyword' AND ISBN = keybookid;";
+		$query = "CALL search_by_keywords('$keyword');";
 		$result = mysqli_query($conn, $query);
 		if(!$result){
 		    echo "Can't retrieve data " . mysqli_error($conn);
@@ -120,11 +120,21 @@
 	}
 
 	function getBookByCategory($conn, $category){
-		$query = "SELECT * FROM books, category WHERE category_name = '$category' AND ISBN = catebookid;";
+		$query = "CALL search_by_cate('$category');";
 		$result = mysqli_query($conn, $query);
 		if(!$result){
 		    echo "Can't retrieve data " . mysqli_error($conn);
 		    exit;
+		}
+		return $result;
+	}
+
+	function getBookByAuthor($conn, $author){
+		$query = "CALL search_by_authors('$author');";
+		$result = mysqli_query($conn, $query);
+		if(!$result){
+			echo "Can't retrieve data " . mysqli_error($conn);
+			exit;
 		}
 		return $result;
 	}
