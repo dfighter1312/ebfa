@@ -15,7 +15,6 @@
 					$mul = 0.2;
 				}
 				$bookprice = getBookPrice($isbn);
-				echo $bookprice;
 		  		if($bookprice){
 		  			$price += $bookprice * $qty * $mul;
 		  		}

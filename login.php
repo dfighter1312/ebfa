@@ -67,7 +67,7 @@
                                         <a href="index.php" class="btn btn-primary btn-user btn-block">
                                             Login as Guest
                                         </a>
-                                        <a href="index.php" class="btn btn-primary btn-user btn-block">
+                                        <a href="admin.php" class="btn btn-primary btn-user btn-block">
                                             Login as Administrator
                                         </a>
                                     </form>

@@ -18,18 +18,12 @@
     $conn = db_connect();
 
 	if(isset($_POST['save_change'])){
-        $a = updateCustomer($_SESSION['customerId'], $_POST['first_name'], $_POST['last_name'], $_POST['phone_no'], $_POST['address'], $_POST['city'], $_POST['state']);
+        $a = insertCreditCard($_POST['card_id'], $_POST['exp_date'], $_POST['bank_name'], $_POST['bank_branch'], $_SESSION['customerId']);
         if(!$a){
             $_SESSION['c'] = 1;
         }
         else {
             $_SESSION['c'] = 0;
-            $_SESSION['first_name'] = $_POST['first_name'];
-            $_SESSION['last_name'] = $_POST['last_name'];
-            $_SESSION['phone_no'] = $_POST['phone_no'];
-            $_SESSION['address'] = $_POST['address'];
-            $_SESSION['city'] = $_POST['city'];
-            $_SESSION['state'] = $_POST['state'];
         }
     }
     require './template/header.php';
@@ -37,12 +31,12 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800"><a href="index.php">EBFA Bookstore</a> > Profile</h1>
+                        <h1 class="h3 mb-0 text-gray-800"><a href="index.php">EBFA Bookstore</a> > <a href="list_credit_card.php">Credit Card</a> > Add Card</h1>
                     </div>
                     
                     <div class="card mb-4 py-3 border-left-primary">
                         <div class="card-body">
-                        <form method="post" action="profile.php" class="form-horizontal">
+                        <form method="post" action="credit_card.php" class="form-horizontal">
                             <?php if(isset($_SESSION['c']) && $_SESSION['c'] == 1){ ?>
                                 <p class="text-danger">One of the fields has the wrong format. Check and correct it.</p>
                             <?php 
@@ -60,22 +54,17 @@
                             else {
                             ?>
                             <div class="col mb-4">
-                                <p class="m0">First Name</p>
-                                <input class="mb-4" type="text" name="first_name" value="<?php echo $_SESSION['first_name']?>">
-                                <p class="m0">Last Name</p>
-                                <input class="mb-4" type="text" name="last_name" value="<?php echo $_SESSION['last_name']?>" maxlength="10">
-                                <p class="m0">Phone number</p>
-                                <input type="text" name="phone_no" value="<?php echo $_SESSION['phone_no']; ?>">
-                                <p class="text-gray-600 small mb-4">Your telephone number must have 10 digits.</p>
-                                <p class="m0">Address</p>
-                                <input class="mb-4" type="text" name="address" value="<?php echo $_SESSION['address']; ?>">
-                                <p class="m0">City</p>
-                                <input class="mb-4" type="text" name="city" value="<?php echo $_SESSION['city']; ?>">
-                                <p class="m0">State/Country</p>
-                                <input type="text" name="state" value="<?php echo $_SESSION['state']; ?>" maxlength="2">
-                                <p class="text-gray-600 small mb-4">The 2 capital letters represent your state/country.</p>
+                                <p class="m0">Card Number</p>
+                                <input class="mb-4" type="number" name="card_id" placeholder="12 digits" maxlength="12">
+                                <p class="m0">Expired Date</p>
+                                <input class="mb-4" type="date" name="exp_date" value="">
+                                <p class="m0">Bank Name</p>
+                                <input class="mb-4" type="text" name="bank_name" value="">
+                                <p class="m0">Bank Branch</p>
+                                <input class="mb-4" type="text" name="bank_branch" value="">
                                 <div></div>
-                                <input type="submit" class="btn btn-primary" name="save_change" value="Save Changes">
+                                <input type="submit" class="btn btn-primary" name="save_change" value="Add Card">
+                                <a href="list_credit_card.php" class="btn btn-primary">Return</a> 
                             </div>
                         </form>
                         </div>

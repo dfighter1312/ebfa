@@ -5,7 +5,7 @@ DROP FUNCTION IF exists book_stock_update;
 CREATE FUNCTION book_stock_update (b_id INT, b_status varchar(50))
 RETURNS INT DETERMINISTIC
 BEGIN 
-	UPDATE `book` SET `status` = b_status WHERE `ISBN` = b_id;
+	UPDATE `books` SET `stock_status` = b_status WHERE `ISBN` = b_id;
 	RETURN 1;
 END;
 DELIMITER ;
@@ -15,7 +15,7 @@ DROP FUNCTION IF exists order_status_update;
 CREATE FUNCTION order_status_update (o_id INT, o_status varchar(50))
 RETURNS INT DETERMINISTIC
 BEGIN 
-    UPDATE `ebook_store`.`orders` SET `status` = o_status WHERE (`order_id` = o_id);
+    UPDATE `orders` SET `status` = o_status WHERE (`order_id` = o_id);
 	RETURN 1;
 END;
 DELIMITER ;
@@ -25,7 +25,7 @@ DROP FUNCTION IF exists order_status_update;
 CREATE FUNCTION order_status_update (o_id INT, o_status varchar(50))
 RETURNS INT DETERMINISTIC
 BEGIN 
-    UPDATE `ebook_store`.`orders` SET `status` = o_status WHERE (`order_id` = o_id);
+    UPDATE `ebook_store`.`orders` SET `stock_status` = o_status WHERE (`order_id` = o_id);
 	RETURN 1;
 END;
 DELIMITER ;

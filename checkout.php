@@ -92,10 +92,13 @@
                                     <p class="ml-4 font-weight-bold"><?php echo $_SESSION['state']; ?></p>
                                     <p class="m0">Payment Method</p>
                                     <div class="col-6 mb-4">
-                                        <select name="inputState" class="form-control sm-3">
+                                        <select name="card_id" class="form-control sm-3">
                                             <option selected>Bank Transfer</option>
-                                            <option>Credit Card 1: VISA ACB</option>
-                                            <option>Credit Card 2: VISA PPL</option>
+                                            <?php
+                                            $row = getListCard($_SESSION['customerId']);
+                                            foreach($row as $card){ ?>
+                                                <option value="<?php echo $card['card_id']; ?>"><?php echo "Card **********", sprintf('%02d', fmod($card['card_id'],100)), " from ", $card['bank_name'] ?></option>
+                                            <?php } ?>
                                         </select>
                                     </div>
                                 </div>

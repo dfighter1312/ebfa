@@ -12,12 +12,12 @@
         $row = getBookByCategory($conn, $category);
     }
     else if($_GET['author']){
-        $author = $_GET['author'];
-        //$row = getBookByAuthor($conn, $author);
+        $author = getAuthorName($conn, $_GET['author']);
+        $row = getBookByAuthor($conn, $_GET['author']);
     }
     else if($_GET['publisher']){
         $publisher = $_GET['publisher'];
-        //$row = getBookByPublisher($conn, $publisher);
+        $row = getBookByPublisher($conn, $publisher);
     }
     require "./template/header.php";
 ?>
@@ -31,7 +31,7 @@
                                 echo "Category > ", $category;
                             }
                             else if($_GET['author']){
-                                echo "Author > ", $author;
+                                echo "Author > ", $author['fname'], " ", $author['lname'];
                             }
                             else if($_GET['publisher']){
                                 echo "Publisher > ", $publisher;

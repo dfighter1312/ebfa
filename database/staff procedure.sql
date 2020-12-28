@@ -25,6 +25,18 @@ END//
 delimiter ;
 
 DELIMITER //
+DROP PROCEDURE if EXISTS  total_id_rented //
+CREATE PROCEDURE
+	total_id_rented(today date)
+BEGIN
+SELECT ISBN, COUNT(*)
+FROM orders, rent_order, books
+WHERE orders.issue_date = today AND orders.order_id = rent_order.roid AND rent_order.rentid = books.ISBN
+GROUP BY ISBN;
+END//
+delimiter ;
+
+DELIMITER //
 DROP PROCEDURE if EXISTS  authors_most_purchased//
 CREATE PROCEDURE
 	authors_most_purchased (today date)
@@ -55,9 +67,9 @@ DROP PROCEDURE if EXISTS  printed_book_purchased//
 CREATE PROCEDURE
 	 printed_book_purchased (today date)
 BEGIN
-SELECT buyid, SUM(quantity)
+SELECT SUM(quantity)
 FROM orders, buy_order
-WHERE orders.issue_date = today AND orders.order_id = buy_order.oid AND buy_order.buyid IN
+WHERE orders.issue_date = today AND orders.order_id = buy_order.oid AND buy_order.buyid NOT IN
 (SELECT eISBN
 FROM ebook);
 END//
@@ -68,9 +80,9 @@ DROP PROCEDURE if EXISTS  ebook_purchased//
 CREATE PROCEDURE
 	 ebook_purchased (today date)
 BEGIN
-SELECT buyid, SUM(quantity)
+SELECT SUM(quantity)
 FROM orders, buy_order
-WHERE orders.issue_date = today AND orders.order_id = buy_order.oid  AND buy_order.quantity = 0 AND buy_order.buyid IN
+WHERE orders.issue_date = today AND orders.order_id = buy_order.oid AND buy_order.buyid IN
 (SELECT eISBN
 FROM ebook);
 END//
@@ -83,7 +95,7 @@ CREATE PROCEDURE
 BEGIN
 SELECT COUNT(*)
 FROM orders, rent_order, books
-WHERE orders.issue_date = today AND orders.order_id = rent_order.roid AND buy_order.buyid = books.ISBN;
+WHERE orders.issue_date = today AND orders.order_id = rent_order.roid AND rent_order.rentid = books.ISBN;
 END//
 delimiter ;
 
@@ -92,7 +104,7 @@ DROP PROCEDURE if EXISTS  most_bought_month//
 CREATE PROCEDURE
 	 most_bought_month (m INT, y int)
 BEGIN
-SELECT ISBN, title, sum(quantity)
+SELECT ISBN, title, SUM(quantity)
 FROM orders, buy_order, books
 WHERE MONTH(orders.issue_date) = m AND YEAR(orders.issue_date) = y AND orders.order_id = buy_order.oid AND buy_order.buyid = books.ISBN
 GROUP BY ISBN
@@ -107,7 +119,7 @@ CREATE PROCEDURE
 BEGIN
 SELECT *
 FROM orders
-WHERE pmethod = 'credit' AND orders.issue_date = today;
+WHERE pmethod = 'Credit Card' AND orders.issue_date = today;
 END//
 delimiter ;
 
@@ -118,7 +130,7 @@ CREATE PROCEDURE
 BEGIN
 SELECT *
 FROM orders
-WHERE pmethod = 'credit' AND status = 'error' AND orders.issue_date = today;
+WHERE pmethod = 'Credit Card' AND status = 'Failed' AND orders.issue_date = today;
 END//
 delimiter ;
 

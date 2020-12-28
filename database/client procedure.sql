@@ -61,6 +61,18 @@ END//
 delimiter ;
 
 DELIMITER //
+DROP PROCEDURE if EXISTS  search_by_publisher //
+CREATE PROCEDURE
+	search_by_years(pub varchar(50))
+BEGIN
+   SELECT * 
+	FROM books
+	WHERE books.Publisher = pub
+    ;    
+END//
+delimiter ;
+
+DELIMITER //
 DROP PROCEDURE if EXISTS  bought_in_month //
 CREATE PROCEDURE
 	bought_in_month(m  INT, cid INT)

@@ -5,6 +5,7 @@
     require_once "./functions/database_functions.php";
     $conn = db_connect();
     $row = getBook($conn, $book_isbn);
+    $st = True;
     require "./template/header.php";
 ?>
 
@@ -17,7 +18,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-4">
-                                    <p> Image </p>
+                                    <p>  </p>
                                 </div>
                                 <div class="col-lg-6">
                                     <h6 class="h4 m-0 font-weight-bold text-primary mb-2"><?php echo $row['Title']; ?></h6>
@@ -25,8 +26,15 @@
                                     <table class="table">
           	                        <?php foreach($row as $key => $value){
                                     if($key == "ISBN" || $key == "Publisher" || $key == "Year" || $key == "stock_status"){
-                                        if($key == "stock_status")
-                                        $key = "Status";
+                                        if($key == "stock_status"){
+                                            $key = "Status";
+                                            if($value == "out of stock"){
+                                                $st = False;
+                                            }
+                                            else {
+                                                $st = True;
+                                            }
+                                        }
                                     }
                                     else continue;
                                     ?>
@@ -40,11 +48,15 @@
                                         mysqli_close($conn); 
                                     }
                                     ?>
+                                    <td> Author </td>
+                                    <td><?php echo getAuthorWriteBooks($book_isbn) ?></td>
+                                    </tr>
                                     </table>
                                     
                                     <form method="post" action="cart.php">
                                         <!-- <div class="col-lg-2 mb-2"> -->
                                             <!-- <div class="row"> -->
+                                                <?php if($st){ ?>
                                                 <div class="form-group">
                                                     <label for="number" class="form-text">Quantity</label>
                                                     <input type="hidden" name="bookisbn" value="<?php echo $book_isbn;?>">
@@ -57,6 +69,7 @@
                                                     <?php } ?>
                                                     <input type="submit" value="Purchase / Add to cart" name="order" class="btn btn-primary">
                                                 </div>
+                                                <?php } ?>
                                             <!-- </div> -->
                                         <!-- </div> -->
                                     </form>
