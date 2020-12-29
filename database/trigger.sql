@@ -2,7 +2,7 @@ USE `ebook_store`;
 
 DELIMITER //
 DROP TRIGGER IF EXISTS book_status;
-CREATE TRIGGER book_status AFTER UPDATE 
+CREATE TRIGGER book_status AFTER UPDATE OR INSERT
 ON `ebook_store`.in_stock FOR EACH ROW
 BEGIN 
 	IF OLD.numstock <> 0 AND NEW.numstock = 0 THEN
